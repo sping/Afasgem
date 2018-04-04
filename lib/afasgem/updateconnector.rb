@@ -44,15 +44,22 @@ class UpdateConnector
 
 	# Builds the inner xml to send to the afas api from the passed hash and action
 	def build_xml(objecthash, action)
+		nested = []
 		builder = Nokogiri::XML::Builder.new do |xml|
-			xml.send(@connectorname.to_sym, 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance") {
+			xml.send('AfasEmployee'.to_sym, 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance") {
 				xml.Element {
 					xml.Fields(Action: action) {
 						objecthash.each do |k, v|
 							xml.send(k.to_sym, v) unless k.to_s == 'Objects'
-							build_nested_xml(xml, v, action) if k.to_s == 'Objects'
+							if k.to_s == 'Objects'
+								nested << [v, action]
+								nil
+							end
 						end
 					}
+					nested.each do |a|
+						build_nested_xml(xml, a[0], a[1])
+					end
 				}
 			}
 		end
@@ -61,16 +68,23 @@ class UpdateConnector
 
 	# Builds the xml for nested objects
 	def build_nested_xml(xml, objects, action)
+		nested = []
 		xml.Objects {
 			objects.each do |obj, values|
-
 				xml.send(obj) {
 					xml.Element {
 						xml.Fields(Action: action) {
 							values.each do |k, v|
-								xml.send(k, v)
+								xml.send(k.to_sym, v) unless k.to_s == 'Objects'
+								if k.to_s == 'Objects'
+									nested << [v, action]
+									nil
+								end
 							end
 						}
+						nested.each do |a|
+							build_nested_xml(xml, a[0], a[1])
+						end
 					}
 				}
 			end
