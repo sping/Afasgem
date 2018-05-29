@@ -1,6 +1,7 @@
 require "afasgem/version"
 require 'afasgem/configuration'
 require 'afasgem/getconnector'
+require 'afasgem/reportconnector'
 require 'afasgem/updateconnector'
 require 'afasgem/operators'
 require 'savon'
@@ -19,6 +20,9 @@ module Afasgem
 
 	# The WSDL url of the dataconnector
 	define_setting :dataconnector_url
+
+	# The WSDL url of the dataconnector
+	define_setting :reportconnector_url
 	# The token, this is only the actual token, not the whole xml thing
 	define_setting :token
 
@@ -37,6 +41,10 @@ module Afasgem
 	# Constructs an updateconnector for the passed connector name
 	def self.updateconnector_factory(name)
 		return UpdateConnector.new(name)
+	end
+
+	def self.reportconnector_factory(name)
+		return ReportConnector.new(name)
 	end
 
 	# Builds the token xml from the configured token
