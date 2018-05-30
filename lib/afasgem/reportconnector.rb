@@ -49,46 +49,26 @@ class ReportConnector
 
   def get_data(report_id)
     execute(report_id) unless @result
-    return get_data_from_result(@result)
-  end
-
-  # Returns the actual rows from a parsed response hash
-  def get_data_from_result(result)
-    return result[:AfasReportConnector][@connectorname.to_sym] || []
+    @result
   end
 
   def execute(report_id)
-    result = execute_request(report_id)
-
-    @data_xml = result[0]
-    @result = result[1]
+    @result = execute_request(report_id)
     return self
   end
 
-  # Actually calls the afas api
-  # def execute(reportId, xml)
-  #   message = {
-  #     token: Afasgem.get_token,
-  #     connectorType: @connectorname,
-  #     connectorVersion: 1,
-  #     reportId: reportId,
-  #     filtersXml: xml
-  #   }
-  #   resp = @client.call(:execute, message: message)
-  #   return resp
-  # end
   def execute_request(report_id)
     message = {
       token: Afasgem.get_token,
-      reportId: report_id
+      reportID: report_id,
+      parametersXml: ""
     }
 
     filter_string = get_filter_string
     message[:filtersXml] = filter_string if filter_string
 
     resp = @client.call(:execute, message: message)
-    xml_string = resp.hash[:envelope][:body][:get_data_response][:get_data_result]
-    return [xml_string, from_xml(xml_string)]
+    resp.hash[:envelope][:body][:execute_response][:execute_result]
   end
 
   # Returns the filter xml in string format
