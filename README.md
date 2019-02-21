@@ -223,6 +223,14 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Bonemind/Afasgem.
 
+## Sping extensions
+
+* added separate payload logger 
+* added subject connector
+* fixed playload from reporting service
+* added report connector
+* changed formatting of nested fields
+
 
 ## License
 

@@ -1,20 +1,9 @@
-class UpdateConnector
+class UpdateConnector < BaseConnector
 
 	# Constructor, takes the connector name
 	def initialize(name)
 		@connectorname = name
-		if Afasgem::debug
-			# Build a debug client if the debug flag is set
-			@client = Savon.client(
-				wsdl: Afasgem::updateconnector_url,
-				log: true,
-				log_level: :debug,
-				pretty_print_xml: true
-			)
-		else
-			# Build a normal client otherwise
-			@client = Savon.client(wsdl: Afasgem::updateconnector_url)
-		end
+		@client = get_client(Afasgem::updateconnector_url)
 	end
 
 	# Method to return the savon client for this constructor

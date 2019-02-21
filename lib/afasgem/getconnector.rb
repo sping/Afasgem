@@ -1,22 +1,11 @@
 # Implements communication with getconnectors
-class GetConnector
+class GetConnector < BaseConnector
 
 	# Constructor, takes the name of the connector
 	def initialize(name)
 		@connectorname = name
 		@filters = []
-		if Afasgem::debug
-			# Build a debug client if the debug flag is set
-			@client = Savon.client(
-				wsdl: Afasgem::getconnector_url,
-				log: true,
-				log_level: :debug,
-				pretty_print_xml: true
-			)
-		else
-			# Build a normal client otherwise
-			@client = Savon.client(wsdl: Afasgem::getconnector_url)
-		end
+		@client = get_client(Afasgem::getconnector_url)
 	end
 
 	# Set the number of results we want to have

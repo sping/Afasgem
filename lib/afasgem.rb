@@ -1,4 +1,5 @@
-require "afasgem/version"
+require 'afasgem/version'
+require 'afasgem/baseconnector'
 require 'afasgem/configuration'
 require 'afasgem/getconnector'
 require 'afasgem/reportconnector'
@@ -36,6 +37,9 @@ module Afasgem
 
 	# Defines whether the requests and responses should be printed
 	define_setting :debug, false
+
+	# Defines the logger for payloads
+	define_setting :payload_logger
 
 	# Constructs a getconnect for the passed connector name
 	def self.getconnector_factory(name)

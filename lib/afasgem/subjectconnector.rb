@@ -1,21 +1,10 @@
-class SubjectConnector
+class SubjectConnector < BaseConnector
 
   # Constructor, takes the connector name
   def initialize(name)
     @connectorname = name
     @filters = []
-    if Afasgem::debug
-      # Build a debug client if the debug flag is set
-      @client = Savon.client(
-        wsdl: Afasgem::subjectconnector_url,
-        log: true,
-        log_level: :debug,
-        pretty_print_xml: true
-      )
-    else
-      # Build a normal client otherwise
-      @client = Savon.client(wsdl: Afasgem::subjectconnector_url)
-    end
+    @client = get_client(Afasgem::subjectconnector_url)
   end
 
   # Method to return the savon client for this constructor
