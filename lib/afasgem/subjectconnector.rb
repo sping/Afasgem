@@ -30,7 +30,6 @@ class SubjectConnector < BaseConnector
     }
 
     resp = @client.call(:get_attachment, message: message)
-    puts resp.inspect
     resp.hash[:envelope][:body][:get_attachment_response][:get_attachment_result]
   end
 end
